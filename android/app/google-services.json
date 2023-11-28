@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "164517520209",
+    "project_id": "tailoringappointmentapp",
+    "storage_bucket": "tailoringappointmentapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:164517520209:android:a0aae9187c130c4a02e970",
+        "android_client_info": {
+          "package_name": "com.example.new_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcP3ZgzanHeuTnUVmEmIpqhU49ghccqHU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
