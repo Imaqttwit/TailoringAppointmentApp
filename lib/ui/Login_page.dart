@@ -9,18 +9,59 @@ import 'package:flutter/material.dart';
 import 'package:new_project/components/my_buttone.dart';
 import 'package:new_project/components/my_components.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  final Function()? onTap;
+  LoginPage({super.key, required this.onTap});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   // text editing controllers
   final emailController = TextEditingController();
+
   final passwordController = TextEditingController();
 
   // sign user in method
   void signUserIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailController.text,
-      password: passwordController.text,
+    // show loading circle
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+
+    // try signing in
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      // Wrong Email
+      showErrorMessage(e.code);
+    }
+  }
+
+  //show error Message
+  void showErrorMessage(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+            backgroundColor: const Color.fromARGB(255, 255, 122, 122),
+            title: Center(
+                child: Text(
+              message,
+              style: const TextStyle(color: Colors.white),
+            )));
+      },
     );
   }
 
@@ -36,7 +77,7 @@ class LoginPage extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          child: Center(
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 SizedBox(height: 50),
@@ -78,6 +119,10 @@ class LoginPage extends StatelessWidget {
                   controller: emailController,
                   hintText: 'Email Address',
                   obscureText: false,
+                  decoration: InputDecoration(
+                      // Define your decoration properties here
+                      // Example: border, fillColor, filled, etc.
+                      ),
                 ),
                 SizedBox(height: 20),
                 // Password
@@ -85,6 +130,10 @@ class LoginPage extends StatelessWidget {
                   controller: passwordController,
                   hintText: 'Password',
                   obscureText: true,
+                  decoration: InputDecoration(
+                      // Define your decoration properties here
+                      // Example: border, fillColor, filled, etc.
+                      ),
                 ),
                 SizedBox(height: 10),
                 Padding(
@@ -105,6 +154,7 @@ class LoginPage extends StatelessWidget {
                 SizedBox(height: 20),
                 //Confirm Button
                 MyButton(
+                  text: "Sign In",
                   onTap: signUserIn,
                 ),
 
@@ -142,11 +192,14 @@ class LoginPage extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(40),
-                      child: Text(
-                        'Customer',
-                        style: TextStyle(
-                          color: const Color.fromARGB(255, 255, 122, 122),
-                          fontSize: 22,
+                      child: GestureDetector(
+                        onTap: widget.onTap,
+                        child: Text(
+                          'Customer',
+                          style: TextStyle(
+                            color: const Color.fromARGB(255, 255, 122, 122),
+                            fontSize: 22,
+                          ),
                         ),
                       ),
                     ),
